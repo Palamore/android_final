@@ -5,12 +5,17 @@ package com.naver.myapplication;
         import java.util.Calendar;
         import java.util.Date;
 
+        import android.Manifest;
+        import android.Manifest.permission;
         import android.app.Activity;
         import android.app.DatePickerDialog;
         import android.app.FragmentTransaction;
         import android.content.Intent;
         import android.content.SharedPreferences;
+        import android.content.pm.PackageManager;
         import android.os.Bundle;
+        import android.support.v4.app.ActivityCompat;
+        import android.support.v4.content.ContextCompat;
         import android.view.Menu;
         import android.view.MenuInflater;
         import android.view.MenuItem;
@@ -30,7 +35,7 @@ public class MainActivity extends Activity implements OnClickListener,
     ArrayList<String> mItems;
     ArrayAdapter<String> adapter;
     TextView textYear;
-    TextView textMon, textDay;
+    TextView textMon;
 
 
 
@@ -44,9 +49,9 @@ public class MainActivity extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        animact();
+       // animact();
 
-
+        checkDangerousPermissions();
 
 
         textYear = (TextView) this.findViewById(R.id.edit1);
@@ -77,6 +82,24 @@ public class MainActivity extends Activity implements OnClickListener,
 
     }
 
+    private void checkDangerousPermissions() {
+        String[] permissions = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+
+        };
+
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int i = 0; i < permissions.length; i++) {
+            permissionCheck = ContextCompat.checkSelfPermission(this, permissions[i]);
+            if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+                break;
+            }
+        }
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissions, 1);
+        }
+    }
 
     public void animact (){
         Intent intents = new Intent(this, animationActivity.class);

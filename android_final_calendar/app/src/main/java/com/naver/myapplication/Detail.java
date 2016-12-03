@@ -9,6 +9,8 @@ package com.naver.myapplication;
         import android.content.Context;
         import android.database.Cursor;
         import android.database.sqlite.SQLiteDatabase;
+        import android.media.MediaPlayer;
+        import android.net.Uri;
         import android.os.Bundle;
         import android.view.LayoutInflater;
         import android.view.View;
@@ -16,12 +18,16 @@ package com.naver.myapplication;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.LinearLayout;
+        import android.widget.Toast;
 
 public class Detail extends Activity implements OnClickListener {
+    private MediaPlayer mMediaPlayer;
+    MemoDBHelper meDBhelper;
     MyDBHelper mDBHelper;
     int mId;
     String today;
-    EditText editDate, editTitle, editTime, editMemo;
+    EditText editDate, editTitle, editTime, editMemo, editUri;
+    Button editMedia, playau, playvi, stopau;
 
     /** Called when the activity is first created. */
     @Override
@@ -33,11 +39,23 @@ public class Detail extends Activity implements OnClickListener {
         editTitle = (EditText) findViewById(R.id.edittitle);
         editTime = (EditText) findViewById(R.id.edittime);
         editMemo = (EditText) findViewById(R.id.editmemo);
+        editUri = (EditText) findViewById(R.id.edituri);
+        editMedia = (Button) findViewById(R.id.editmedia);
+        editMedia.setOnClickListener(this);
+        playau = (Button) findViewById(R.id.playaudio);
+        playau.setOnClickListener(this);
+        playvi = (Button) findViewById(R.id.playvideo);
+        playvi.setOnClickListener(this);
+        stopau = (Button)findViewById(R.id.stopaudio);
+        stopau.setOnClickListener(this);
+
+
 
         Intent intent = getIntent();
         mId = intent.getIntExtra("ParamID", -1);
         today = intent.getStringExtra("ParamDate");
 
+ //       meDBhelper = new MemoDBHelper(this, "Memo.db", null, 1);
 
         mDBHelper = new MyDBHelper(this, "Today.db", null, 1);
 
@@ -57,6 +75,8 @@ public class Detail extends Activity implements OnClickListener {
             mDBHelper.close();
         }
 
+
+
         Button btn1 = (Button) findViewById(R.id.btnsave);
         btn1.setOnClickListener(this);
         Button btn2 = (Button) findViewById(R.id.btndel);
@@ -64,9 +84,27 @@ public class Detail extends Activity implements OnClickListener {
         Button btn3 = (Button) findViewById(R.id.btncancel);
         btn3.setOnClickListener(this);
 
+
         if (mId == -1) {
             btn2.setVisibility(View.INVISIBLE);
 
+        }
+    }
+
+    public void playAudio(Uri uri) throws Exception {
+        killMediaPlayer();
+        mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setDataSource(getApplicationContext(), uri);
+        mMediaPlayer.prepare();
+        mMediaPlayer.start();
+    }
+    private void killMediaPlayer() {
+        if (mMediaPlayer != null) {
+            try {
+                mMediaPlayer.release();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -92,7 +130,10 @@ public class Detail extends Activity implements OnClickListener {
                             + editMemo.getText().toString() + "');");
                 }
                 mDBHelper.close();
+
+
                 setResult(RESULT_OK);
+                finish();
                 break;
             case R.id.btndel:
                 new AlertDialog.Builder(this)
@@ -107,13 +148,45 @@ public class Detail extends Activity implements OnClickListener {
                 }
 
                     setResult(RESULT_OK);
+                finish();
                     break;
 
             case R.id.btncancel:
                 setResult(RESULT_CANCELED);
+                finish();
+                break;
+
+            case R.id.editmedia:
+                String iuriString = editUri.getText().toString();
+                Intent iintent = new Intent(this, imageAct.class);
+                iintent.putExtra("image", iuriString);
+                startActivity(iintent);
+
+                break;
+            case R.id.playaudio:
+                String uriString = editUri.getText().toString();
+                Uri uri=Uri.parse(uriString);
+                    try {
+                        playAudio(uri);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+              //  Toast.makeText(Detail.this, uriString,Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.stopaudio:
+                mMediaPlayer.pause();
+
+                break;
+            case R.id.playvideo:
+                String vuriString = editUri.getText().toString();
+                Intent vintent = new Intent(this, videoAct.class);
+                vintent.putExtra("video", vuriString);
+                startActivity(vintent);
+
                 break;
         }
-        finish();
+
     }
 
 

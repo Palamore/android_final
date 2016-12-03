@@ -9,7 +9,8 @@ android:orientation="vertical" >
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <TextView
         android:layout_width="fill_parent"
@@ -65,6 +66,59 @@ android:orientation="vertical" >
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Media" />
+    <EditText
+        android:id="@+id/edituri"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="file:///storage/emulated/0/"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+    android:id="@+id/editmedia"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+        android:layout_weight="1"
+    android:gravity="center"
+        android:text="GetImage"/>
+    <Button
+        android:id="@+id/playaudio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="playaudio"/>
+    <Button
+        android:id="@+id/stopaudio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="stopaudio"/>
+
+    <Button
+        android:id="@+id/playvideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="playvideo"/>
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:id="@+id/MediaView">
+
+    </LinearLayout>
 </LinearLayout>
 
 <LinearLayout
