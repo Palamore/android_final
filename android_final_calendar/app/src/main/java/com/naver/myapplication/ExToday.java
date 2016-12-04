@@ -40,11 +40,11 @@ public class ExToday extends Activity implements OnItemClickListener,
         text.setText(today);
 
 
-        mDBHelper = new MyDBHelper(this, "Today.db", null, 1);
+        mDBHelper = new MyDBHelper(this, "Schedule.db", null, 1);
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
 
         cursor = db.rawQuery(
-                "SELECT * FROM today WHERE date = '" + today + "'", null);
+                "SELECT * FROM schedule WHERE date = '" + today + "'", null);
 
         adapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_2, cursor, new String[] {
@@ -91,7 +91,7 @@ public class ExToday extends Activity implements OnItemClickListener,
                 if (resultCode == RESULT_OK) {
                     // adapter.notifyDataSetChanged();
                     SQLiteDatabase db = mDBHelper.getWritableDatabase();
-                    cursor = db.rawQuery("SELECT * FROM today WHERE date = '"
+                    cursor = db.rawQuery("SELECT * FROM schedule WHERE date = '"
                             + today + "'", null);
                     adapter.changeCursor(cursor);
                     mDBHelper.close();

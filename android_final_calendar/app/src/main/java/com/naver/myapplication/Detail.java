@@ -4,6 +4,7 @@ package com.naver.myapplication;
 
         import android.app.Activity;
         import android.app.AlertDialog;
+        import android.app.Dialog;
         import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.Context;
@@ -57,20 +58,21 @@ public class Detail extends Activity implements OnClickListener {
 
  //       meDBhelper = new MemoDBHelper(this, "Memo.db", null, 1);
 
-        mDBHelper = new MyDBHelper(this, "Today.db", null, 1);
+        mDBHelper = new MyDBHelper(this, "Schedule.db", null, 1);
 
         if (mId == -1) {
             editDate.setText(today);
         } else {
             SQLiteDatabase db = mDBHelper.getWritableDatabase();
-            Cursor cursor = db.rawQuery("SELECT * FROM today WHERE _id='" + mId
+            Cursor cursor = db.rawQuery("SELECT * FROM schedule WHERE _id='" + mId
                     + "'", null);
 
             if (cursor.moveToNext()) {
                 editTitle.setText(cursor.getString(1));
                 editDate.setText(cursor.getString(2));
                 editTime.setText(cursor.getString(3));
-                editMemo.setText(cursor.getString(4));
+                editUri.setText(cursor.getString(4));
+                editMemo.setText(cursor.getString(5));
             }
             mDBHelper.close();
         }
@@ -116,17 +118,19 @@ public class Detail extends Activity implements OnClickListener {
         switch (v.getId()) {
             case R.id.btnsave:
                 if (mId != -1) {
-                    db.execSQL("UPDATE today SET title='"
+                    db.execSQL("UPDATE schedule SET title='"
                             + editTitle.getText().toString()
                             + editDate.getText().toString()
                             + editTime.getText().toString()
+                            + editUri.getText().toString()
                             + editMemo.getText().toString() + mId
                             + "';");
                 } else {
-                    db.execSQL("INSERT INTO today VALUES(null, '"
+                    db.execSQL("INSERT INTO schedule VALUES(null, '"
                             + editTitle.getText().toString() + "', '"
                             + editDate.getText().toString() + "', '"
                             + editTime.getText().toString() + "', '"
+                            + editUri.getText().toString() + "', '"
                             + editMemo.getText().toString() + "');");
                 }
                 mDBHelper.close();
@@ -142,13 +146,14 @@ public class Detail extends Activity implements OnClickListener {
                         .setPositiveButton("Yes",null)
                         .setNegativeButton("No", null)
                         .show();
-                if (mId != -1) {
-                    db.execSQL("DELETE FROM today WHERE _id='" + mId + "';");
-                    mDBHelper.close();
-                }
+                    if (mId != -1) {
+                        db.execSQL("DELETE FROM schedule WHERE _id='" + mId + "';");
+                        mDBHelper.close();
+                    }
 
                     setResult(RESULT_OK);
-                finish();
+                    finish();
+
                     break;
 
             case R.id.btncancel:

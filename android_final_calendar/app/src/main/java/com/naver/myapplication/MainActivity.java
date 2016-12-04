@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // animact();
+        animact();
 
         checkDangerousPermissions();
 
