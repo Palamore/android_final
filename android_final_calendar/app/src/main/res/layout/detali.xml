@@ -77,7 +77,7 @@ android:orientation="vertical" >
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="file:///storage/emulated/0/"/>
+        android:text="http://"/>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">

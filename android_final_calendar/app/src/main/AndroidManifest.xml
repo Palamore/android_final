@@ -4,6 +4,7 @@
 
     >
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 
 
@@ -36,7 +37,7 @@
         </activity>
 
         <activity android:name=".imageAct"
-            android:label="VideoView">
+            android:label="ImageView">
         </activity>
 
 

@@ -12,6 +12,7 @@ package com.naver.myapplication;
         import android.database.sqlite.SQLiteDatabase;
         import android.media.MediaPlayer;
         import android.net.Uri;
+
         import android.os.Bundle;
         import android.view.LayoutInflater;
         import android.view.View;
@@ -21,10 +22,13 @@ package com.naver.myapplication;
         import android.widget.LinearLayout;
         import android.widget.Toast;
 
+        import java.net.URL;
+
 public class Detail extends Activity implements OnClickListener {
     private MediaPlayer mMediaPlayer;
     MemoDBHelper meDBhelper;
     MyDBHelper mDBHelper;
+    final Context context = this;
     int mId;
     String today;
     EditText editDate, editTitle, editTime, editMemo, editUri;
@@ -140,21 +144,41 @@ public class Detail extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.btndel:
-                new AlertDialog.Builder(this)
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+                alertDialogBuilder
                         .setTitle("delete alert!")
                         .setMessage("정말 삭제하시겠습니까?")
-                        .setPositiveButton("Yes",null)
-                        .setNegativeButton("No", null)
-                        .show();
-                    if (mId != -1) {
-                        db.execSQL("DELETE FROM schedule WHERE _id='" + mId + "';");
-                        mDBHelper.close();
-                    }
+                        .setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog, int id) {
+                                        if (mId != -1) {
+                                            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+                                            db.execSQL("DELETE FROM schedule WHERE _id='" + mId + "';");
+                                            mDBHelper.close();
+                                        }
 
-                    setResult(RESULT_OK);
-                    finish();
+                                        setResult(RESULT_OK);
+                                        finish();
 
-                    break;
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog, int id) {
+                                        // 다이얼로그를 취소한다
+                                        dialog.cancel();
+                                    }
+                                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
+
+                break;
+
 
             case R.id.btncancel:
                 setResult(RESULT_CANCELED);

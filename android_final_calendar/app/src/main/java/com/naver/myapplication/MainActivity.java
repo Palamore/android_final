@@ -12,7 +12,9 @@ package com.naver.myapplication;
         import android.app.FragmentTransaction;
         import android.content.Intent;
         import android.content.SharedPreferences;
+        import android.database.Cursor;
         import android.content.pm.PackageManager;
+        import android.database.sqlite.SQLiteDatabase;
         import android.os.Bundle;
         import android.support.v4.app.ActivityCompat;
         import android.support.v4.content.ContextCompat;
@@ -34,22 +36,21 @@ public class MainActivity extends Activity implements OnClickListener,
         OnItemClickListener {
     ArrayList<String> mItems;
     ArrayAdapter<String> adapter;
+    MyDBHelper mDBHelper;
     TextView textYear;
     TextView textMon;
+    int mId;
 
 
-
-
-
-
-
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        animact();
+        //  animact();
 
         checkDangerousPermissions();
 
@@ -57,6 +58,11 @@ public class MainActivity extends Activity implements OnClickListener,
         textYear = (TextView) this.findViewById(R.id.edit1);
         textMon = (TextView) this.findViewById(R.id.edit2);
 
+        mDBHelper = new MyDBHelper(this, "Schedule.db", null, 1);
+
+        mDBHelper.close();
+
+  //      definto();
 
         mItems = new ArrayList<String>();
         adapter = new ArrayAdapter<String>(this,
@@ -75,12 +81,32 @@ public class MainActivity extends Activity implements OnClickListener,
         fillDate(year, mon);
 
 
-
         Button btnmove2 = (Button) this.findViewById(R.id.bt2);
         btnmove2.setOnClickListener(this);
 
 
     }
+
+    private void definto() {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        String defTitle, defD, defTime, defU, defM, twice_mp4_URL, gitan_mp3_URL;
+        defTitle = "Android / B107";
+        defD = "2016/12/7";
+        defTime = "10:00";
+        defU = "https://github.com/kwanu70/AndroidExamples/blob/master/musics/twice.mp4?raw=true";
+        defM = "twice.mp4";
+
+        twice_mp4_URL = "https://github.com/kwanu70/AndroidExamples/blob/master/musics/twice.mp4?raw=true";
+        gitan_mp3_URL = "http://cfile10.uf.tistory.com/media/25720C365845672D373574";
+        db.execSQL("INSERT INTO schedule VALUES(null, '"
+                + defTitle + "', '"
+                + defD + "', '"
+                + defTime + "', '"
+                + defU + "', '"
+                + defM + "');");
+
+    mDBHelper.close();
+}
 
     private void checkDangerousPermissions() {
         String[] permissions = {

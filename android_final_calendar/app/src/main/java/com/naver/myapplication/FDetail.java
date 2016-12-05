@@ -3,6 +3,8 @@ package com.naver.myapplication;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,6 +20,7 @@ public class FDetail extends Activity implements OnClickListener {
     private MediaPlayer mMediaPlayer;
     MemoDBHelper meDBhelper;
     MyDBHelper mDBHelper;
+    final Context context = this;
     int mId;
     String today, timee;
     EditText editDate, editTitle, editTime, editMemo, editUri;
@@ -98,6 +101,27 @@ public class FDetail extends Activity implements OnClickListener {
         }
     }
 
+    public void defaultinto(){
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        if (mId != -1) {
+            db.execSQL("UPDATE schedule SET title='"
+                    + editTitle.getText().toString()
+                    + editDate.getText().toString()
+                    + editTime.getText().toString()
+                    + editUri.getText().toString()
+                    + editMemo.getText().toString() + mId
+                    + "';");
+        } else {
+            db.execSQL("INSERT INTO schedule VALUES(null, '"
+                    + editTitle.getText().toString() + "', '"
+                    + editDate.getText().toString() + "', '"
+                    + editTime.getText().toString() + "', '"
+                    + editUri.getText().toString() + "', '"
+                    + editMemo.getText().toString() + "');");
+        }
+        mDBHelper.close();
+    }
+
     @Override
     public void onClick(View v) {
         // TODO Auto-generated method stub
@@ -126,20 +150,41 @@ public class FDetail extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.btndel:
-                new AlertDialog.Builder(this)
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+                alertDialogBuilder
                         .setTitle("delete alert!")
                         .setMessage("정말 삭제하시겠습니까?")
-                        .setPositiveButton("Yes",null)
-                        .setNegativeButton("No", null)
-                        .show();
-                if (mId != -1) {
-                    db.execSQL("DELETE FROM schedule WHERE _id='" + mId + "';");
-                    mDBHelper.close();
-                }
+                        .setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog, int id) {
+                                        if (mId != -1) {
+                                            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+                                            db.execSQL("DELETE FROM schedule WHERE _id='" + mId + "';");
+                                            mDBHelper.close();
+                                        }
 
-                    setResult(RESULT_OK);
-                finish();
-                    break;
+                                        setResult(RESULT_OK);
+                                        finish();
+
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog, int id) {
+                                        // 다이얼로그를 취소한다
+                                        dialog.cancel();
+                                    }
+                                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
+
+                break;
+
 
             case R.id.btncancel:
                 setResult(RESULT_CANCELED);
