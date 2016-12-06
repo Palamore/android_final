@@ -80,7 +80,9 @@ public class WeekActivity extends Activity implements OnClickListener,
                 startActivity(mintent);
                 break;
             case 1:
+                Date date = new Date();
                 Toast.makeText(WeekActivity.this,"WeekView",Toast.LENGTH_SHORT).show();
+
                 break;
             case 2:
                 Toast.makeText(WeekActivity.this,"DayView",Toast.LENGTH_SHORT).show();
@@ -151,9 +153,9 @@ public class WeekActivity extends Activity implements OnClickListener,
             Date date = new Date();
             Intent intent = new Intent(this,WexToday.class);
             intent.putExtra("Param1",  date.getYear() + 1900 + "/"
-                    + (date.getMonth() + 1) + "/" +( ((date.getDay()-3)/7+1) + "째 주 " + mItems.get(arg2))+ "요일" );
+                    + (date.getMonth() + 1) + "/" +( ((date.getDay()+13)/7) + "주차 " + mItems.get(arg2)+ "요일" ));
             intent.putExtra("Param2",  date.getYear() + 1900 + "/"
-                    + (date.getMonth() + 1) + "/" +(date.getDay()-3) );
+                    + (date.getMonth() + 1) + "/" +( ((date.getDay()+13)/7) + "주차 " + mItems.get(arg2)+ "요일" ));
             startActivity(intent);
         }
     }

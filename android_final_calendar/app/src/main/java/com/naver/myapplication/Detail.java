@@ -32,7 +32,8 @@ public class Detail extends Activity implements OnClickListener {
     int mId;
     String today;
     EditText editDate, editTitle, editTime, editMemo, editUri;
-    Button editMedia, playau, playvi, stopau;
+    Button editMedia, playau, playvi, stopau, getim;
+    String defTitle, defD, defTime, defU, defM, twice_mp4_URL, gitan_mp3_URL, apple_jpg_URL;
 
     /** Called when the activity is first created. */
     @Override
@@ -53,7 +54,18 @@ public class Detail extends Activity implements OnClickListener {
         playvi.setOnClickListener(this);
         stopau = (Button)findViewById(R.id.stopaudio);
         stopau.setOnClickListener(this);
+        getim = (Button)findViewById(R.id.getimage);
+        getim.setOnClickListener(this);
 
+
+        defTitle = "Android / B107";
+        defD = "2016/12/7";
+        defTime = "10:00";
+        defU = "https://github.com/kwanu70/AndroidExamples/blob/master/musics/twice.mp4?raw=true";
+        defM = "twice.mp4";
+        apple_jpg_URL = "http://cfile3.uf.tistory.com/image/25134B365845673E191907";
+        twice_mp4_URL = "https://github.com/kwanu70/AndroidExamples/blob/master/musics/twice.mp4?raw=true";
+        gitan_mp3_URL = "http://cfile10.uf.tistory.com/media/25720C365845672D373574";
 
 
         Intent intent = getIntent();
@@ -186,10 +198,37 @@ public class Detail extends Activity implements OnClickListener {
                 break;
 
             case R.id.editmedia:
-                String iuriString = editUri.getText().toString();
-                Intent iintent = new Intent(this, imageAct.class);
-                iintent.putExtra("image", iuriString);
-                startActivity(iintent);
+                AlertDialog.Builder selectDialogBuilder = new AlertDialog.Builder(
+                        context);
+                selectDialogBuilder
+                        .setTitle("get URL")
+                        .setMessage("URL 텍스트 불러오기")
+                        .setPositiveButton("twice.mp4",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog, int id) {
+                                        editUri.setText(twice_mp4_URL);
+
+                                    }
+                                })
+                        .setNegativeButton("gitan.mp3",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog, int id) {
+                                       editUri.setText(gitan_mp3_URL);
+                                    }
+                                })
+                        .setNeutralButton("apple.jpg",  new DialogInterface.OnClickListener() {
+                            public void onClick(
+                                    DialogInterface dialog, int id) {
+                                editUri.setText(apple_jpg_URL);
+                            }
+                        })
+
+                ;
+
+                AlertDialog selectDialog = selectDialogBuilder.create();
+                selectDialog.show();
 
                 break;
             case R.id.playaudio:
@@ -204,8 +243,9 @@ public class Detail extends Activity implements OnClickListener {
               //  Toast.makeText(Detail.this, uriString,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.stopaudio:
-                mMediaPlayer.pause();
-
+                try {
+                    mMediaPlayer.pause();
+                } catch(NullPointerException e){}
                 break;
             case R.id.playvideo:
                 String vuriString = editUri.getText().toString();
@@ -213,6 +253,12 @@ public class Detail extends Activity implements OnClickListener {
                 vintent.putExtra("video", vuriString);
                 startActivity(vintent);
 
+                break;
+            case R.id.getimage:
+                String iuriString = editUri.getText().toString();
+                Intent iintent = new Intent(this, imageAct.class);
+                iintent.putExtra("image", iuriString);
+                startActivity(iintent);
                 break;
         }
 

@@ -24,7 +24,8 @@ public class FDetail extends Activity implements OnClickListener {
     int mId;
     String today, timee;
     EditText editDate, editTitle, editTime, editMemo, editUri;
-    Button editMedia, playau, playvi, stopau;
+    Button editMedia, playau, playvi, stopau, getim;
+    String defTitle, defD, defTime, defU, defM, twice_mp4_URL, gitan_mp3_URL, apple_jpg_URL;
 
     /** Called when the activity is first created. */
     @Override
@@ -45,6 +46,8 @@ public class FDetail extends Activity implements OnClickListener {
         playvi.setOnClickListener(this);
         stopau = (Button)findViewById(R.id.stopaudio);
         stopau.setOnClickListener(this);
+        getim = (Button)findViewById(R.id.getimage);
+        getim.setOnClickListener(this);
 
         Intent intent = getIntent();
         mId = intent.getIntExtra("ParamID", -1);
@@ -70,6 +73,16 @@ public class FDetail extends Activity implements OnClickListener {
             }
             mDBHelper.close();
         }
+
+        defTitle = "Android / B107";
+        defD = "2016/12/7";
+        defTime = "10:00";
+        defU = "https://github.com/kwanu70/AndroidExamples/blob/master/musics/twice.mp4?raw=true";
+        defM = "twice.mp4";
+
+        apple_jpg_URL = "http://cfile3.uf.tistory.com/image/25134B365845673E191907";
+        twice_mp4_URL = "https://github.com/kwanu70/AndroidExamples/blob/master/musics/twice.mp4?raw=true";
+        gitan_mp3_URL = "http://cfile10.uf.tistory.com/media/25720C365845672D373574";
 
         Button btn1 = (Button) findViewById(R.id.btnsave);
         btn1.setOnClickListener(this);
@@ -191,10 +204,38 @@ public class FDetail extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.editmedia:
-                String iuriString = editUri.getText().toString();
-                Intent iintent = new Intent(this, imageAct.class);
-                iintent.putExtra("image", iuriString);
-                startActivity(iintent);
+                AlertDialog.Builder selectDialogBuilder = new AlertDialog.Builder(
+                        context);
+                selectDialogBuilder
+                        .setTitle("get URL")
+                        .setMessage("URL 텍스트 불러오기")
+                        .setPositiveButton("twice.mp4",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog, int id) {
+                                        editUri.setText(twice_mp4_URL);
+
+                                    }
+                                })
+                        .setNegativeButton("gitan.mp3",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog, int id) {
+                                        editUri.setText(gitan_mp3_URL);
+                                    }
+                                })
+                        .setNeutralButton("apple.jpg",  new DialogInterface.OnClickListener() {
+                            public void onClick(
+                                    DialogInterface dialog, int id) {
+                                editUri.setText(apple_jpg_URL);
+                            }
+                        })
+
+                ;
+
+                AlertDialog selectDialog = selectDialogBuilder.create();
+                selectDialog.show();
+
 
                 break;
             case R.id.playaudio:
@@ -219,7 +260,12 @@ public class FDetail extends Activity implements OnClickListener {
                 startActivity(vintent);
 
                 break;
-
+            case R.id.getimage:
+                String iuriString = editUri.getText().toString();
+                Intent iintent = new Intent(this, imageAct.class);
+                iintent.putExtra("image", iuriString);
+                startActivity(iintent);
+                break;
         }
 
     }

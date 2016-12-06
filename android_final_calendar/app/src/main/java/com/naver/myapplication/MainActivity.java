@@ -40,6 +40,7 @@ public class MainActivity extends Activity implements OnClickListener,
     TextView textYear;
     TextView textMon;
     int mId;
+    String defTitle, defD, defTime, defU, defM, twice_mp4_URL, gitan_mp3_URL;
 
 
     /**
@@ -50,7 +51,7 @@ public class MainActivity extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //  animact();
+          animact();
 
         checkDangerousPermissions();
 
@@ -85,19 +86,13 @@ public class MainActivity extends Activity implements OnClickListener,
         btnmove2.setOnClickListener(this);
 
 
+
+
     }
 
     private void definto() {
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
-        String defTitle, defD, defTime, defU, defM, twice_mp4_URL, gitan_mp3_URL;
-        defTitle = "Android / B107";
-        defD = "2016/12/7";
-        defTime = "10:00";
-        defU = "https://github.com/kwanu70/AndroidExamples/blob/master/musics/twice.mp4?raw=true";
-        defM = "twice.mp4";
 
-        twice_mp4_URL = "https://github.com/kwanu70/AndroidExamples/blob/master/musics/twice.mp4?raw=true";
-        gitan_mp3_URL = "http://cfile10.uf.tistory.com/media/25720C365845672D373574";
         db.execSQL("INSERT INTO schedule VALUES(null, '"
                 + defTitle + "', '"
                 + defD + "', '"

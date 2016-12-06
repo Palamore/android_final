@@ -34,10 +34,11 @@ public class WexToday extends Activity implements OnItemClickListener,
 
         Intent intent = getIntent();
         today = intent.getStringExtra("Param1");
+        toda = intent.getStringExtra("Param2");
 
 
         TextView text = (TextView) findViewById(R.id.texttoday);
-        text.setText(today);
+        text.setText(toda);
 
 
         mDBHelper = new MyDBHelper(this, "Schedule.db", null, 1);

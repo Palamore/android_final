@@ -5,6 +5,7 @@ package com.naver.myapplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -25,12 +26,18 @@ ImageView ImageView;
 
         ImageView = (ImageView)findViewById(R.id.imageView);
 
+
+
         Intent intent = getIntent();
         iid = intent.getStringExtra("image");
-        MediaController mc = new MediaController(this);
 
-        ImageView.setImageURI(Uri.parse(iid));
 
+
+        ImageLoaderTask imageLoad = new ImageLoaderTask(
+                ImageView,
+                iid
+        );
+        imageLoad.execute();
 
 
 
