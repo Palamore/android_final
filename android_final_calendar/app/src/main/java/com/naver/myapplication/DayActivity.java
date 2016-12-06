@@ -54,8 +54,10 @@ public class DayActivity extends Activity implements OnClickListener,
         Date date = new Date();// 오늘의 날짜를 세팅
         int year = date.getYear() + 1900;
         int mon = date.getMonth() + 1;
+        int da = date.getMonth() - 4;
         textYear.setText(year + "");
         textMon.setText(mon + "");
+        textDay.setText(da + "");
 
 
         mItems = new ArrayList<String>();
@@ -83,7 +85,8 @@ private void fillday(){
     mItems.clear();
 
     for (int i = 1; i <= 24; i++) {
-        mItems.add(i + ":00");
+        mItems.add(i + "");
+
     }
 }
 
